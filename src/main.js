@@ -3,6 +3,7 @@ const {app, BrowserWindow, dialog} = require('electron')
 
 const ipcMain = require('electron').ipcMain
 const fs = require('fs')
+
 function createWindow() {
     const win = new BrowserWindow({
         width: 1200,
@@ -50,11 +51,9 @@ function createAtlasFromJson(filePath){
                 orig: `${entry.keys[0].bounds.w}, ${entry.keys[0].bounds.h}`,
                 offset: '0, 0',
                 index: '-1'
-
             })
         })
-
-        console.log(atlas)
+        stringBuilder(atlas)
 
     })
 }
@@ -72,3 +71,13 @@ app.on("open-file", file=>{
 ipcMain.on('fileInput', ()=>{
     openDialog()
 })
+
+function stringBuilder(atlas) {
+    let atlasFormat = `${atlas.name}\n${atlas.size}\n${atlas.format}`
+    let tiles = ''
+    atlas.tiles.forEach(tile =>{
+        tiles += `\n${tile.name}\n  ${tile.rotate}\n  ${tile.xy}\n  ${tile.size}\n  ${tile.orig}\n  ${tile.offset}\n  ${tile.index}`
+    })
+    console.log(atlasFormat.concat(tiles))
+    // console.log(atlas)
+}
