@@ -53,8 +53,9 @@ function createAtlasFromJson(filePath){
                 index: '-1'
             })
         })
-        stringBuilder(atlas)
-
+        let outputPath = filePath.split('\\')
+        const outPutFileName = outputPath.pop()
+        stringBuilder(atlas, outputPath.join('\\'), outPutFileName)
     })
 }
 app.whenReady().then(()=>{
@@ -72,12 +73,12 @@ ipcMain.on('fileInput', ()=>{
     openDialog()
 })
 
-function stringBuilder(atlas) {
+function stringBuilder(atlas, filePath, outputFileName) {
     let atlasFormat = `${atlas.name}\n${atlas.size}\n${atlas.format}`
     let tiles = ''
     atlas.tiles.forEach(tile =>{
         tiles += `\n${tile.name}\n  ${tile.rotate}\n  ${tile.xy}\n  ${tile.size}\n  ${tile.orig}\n  ${tile.offset}\n  ${tile.index}`
     })
-    console.log(atlasFormat.concat(tiles))
-    // console.log(atlas)
+
+    fs.writeFileSync(`${filePath}/${outputFileName}.txt`, atlasFormat.concat(tiles))
 }
