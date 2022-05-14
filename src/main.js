@@ -74,10 +74,10 @@ ipcMain.on('fileInput', ()=>{
 })
 
 function stringBuilder(atlas, filePath, outputFileName) {
-    let atlasFormat = `${atlas.name}\n${atlas.size}\n${atlas.format}`
+    let atlasFormat = `${atlas.name}\nsize:${atlas.size}\nformat: ${atlas.format}`
     let tiles = ''
     atlas.tiles.forEach(tile =>{
-        tiles += `\n${tile.name}\n  ${tile.rotate}\n  ${tile.xy}\n  ${tile.size}\n  ${tile.orig}\n  ${tile.offset}\n  ${tile.index}`
+        tiles += `\n${tile.name.replace(/\s/g, "")}\n  rotate: ${tile.rotate}\n  xy: ${tile.xy}\n  size: ${tile.size}\n  orig: ${tile.orig}\n  offset: ${tile.offset}\n  index: ${tile.index}`
     })
 
     fs.writeFileSync(`${filePath}/${outputFileName}.txt`, atlasFormat.concat(tiles))
